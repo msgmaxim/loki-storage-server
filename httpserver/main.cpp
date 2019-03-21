@@ -90,8 +90,8 @@ int main(int argc, char* argv[]) {
         }
 
         // TODO: consider adding auto-flushing for logging
-        logging::core::get()->set_filter(logging::trivial::severity >=
-                                         logLevel);
+        // logging::core::get()->set_filter(logging::trivial::severity >=
+        //                                  logLevel);
         BOOST_LOG_TRIVIAL(info) << "Setting log level to " << logLevelString;
 
         if (vm.count("lokinet-identity")) {
@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
 
         boost::asio::io_context ioc{1};
 
-        loki::ServiceNode service_node(ioc, lokinetIdentityPath, dbLocation);
+        loki::ServiceNode service_node(ioc, port, lokinetIdentityPath, dbLocation);
         ChannelEncryption<std::string> channelEncryption(lokinetIdentityPath);
 
         /// Should run http server
