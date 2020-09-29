@@ -511,6 +511,9 @@ void RequestHandler::process_onion_to_url(
     // TODO: investigate if the use of a shared pointer is necessary
     auto req = std::make_shared<request_t>();
 
+    LOKI_LOG(debug, "Sending onion to url: {}, target: {}", host, target);
+    LOKI_LOG(debug, "Body: {}", payload);
+
     req->body() = payload;
     req->set(http::field::host, host);
     req->method(http::verb::post);
@@ -524,6 +527,9 @@ void RequestHandler::process_onion_to_url(
             cb(loki::Response{Status::OK, *res.body});
         } else {
             LOKI_LOG(debug, "Loki server error: {}", res.error_code);
+            if (res.raw_response) {
+                LOKI_LOG(debug, "Raw response: {}", *res.raw_response);
+            }
             cb(loki::Response{Status::BAD_REQUEST, "Loki Server error"});
         }
     };
